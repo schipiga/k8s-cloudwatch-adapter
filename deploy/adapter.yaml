@@ -3,7 +3,7 @@ kind: Namespace
 metadata:
   name: custom-metrics
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-cloudwatch-adapter:system:auth-delegator
@@ -16,7 +16,7 @@ subjects:
   name: k8s-cloudwatch-adapter
   namespace: custom-metrics
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: k8s-cloudwatch-adapter-auth-reader
@@ -30,7 +30,7 @@ subjects:
   name: k8s-cloudwatch-adapter
   namespace: custom-metrics
 ---
-apiVersion: apps/v1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   labels:
@@ -70,7 +70,7 @@ spec:
       - name: temp-vol
         emptyDir: {}
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-cloudwatch-adapter-resource-reader
@@ -108,13 +108,13 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1beta1.custom.metrics.k8s.io
+  name: v1alpha1.custom.metrics
 spec:
   service:
     name: k8s-cloudwatch-adapter
     namespace: custom-metrics
-  group: custom.metrics.k8s.io
-  version: v1beta1
+  group: custom.metrics
+  version: v1alpha1
   insecureSkipTLSVerify: true
   groupPriorityMinimum: 100
   versionPriority: 100
@@ -122,38 +122,38 @@ spec:
 apiVersion: apiregistration.k8s.io/v1beta1
 kind: APIService
 metadata:
-  name: v1beta1.external.metrics.k8s.io
+  name: v1alpha1.external.metrics
 spec:
   service:
     name: k8s-cloudwatch-adapter
     namespace: custom-metrics
-  group: external.metrics.k8s.io
-  version: v1beta1
+  group: external.metrics
+  version: v1alpha1
   insecureSkipTLSVerify: true
   groupPriorityMinimum: 100
   versionPriority: 100
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: k8s-cloudwatch-adapter:custom-metrics-reader
 rules:
 - apiGroups:
-  - custom.metrics.k8s.io
+  - custom.metrics
   resources: ["*"]
   verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: k8s-cloudwatch-adapter:external-metrics-reader
 rules:
 - apiGroups:
-  - external.metrics.k8s.io
+  - external.metrics
   resources: ["*"]
   verbs: ["*"]
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: k8s-cloudwatch-adapter-resource-reader
@@ -168,7 +168,7 @@ rules:
   - get
   - list
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-cloudwatch-adapter:custom-metrics-reader
@@ -181,7 +181,7 @@ subjects:
   name: horizontal-pod-autoscaler
   namespace: kube-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-cloudwatch-adapter:external-metrics-reader
@@ -207,7 +207,7 @@ spec:
     singular: externalmetric
   scope: Namespaced
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
   name: k8s-cloudwatch-adapter:crd-metrics-reader
@@ -223,7 +223,7 @@ rules:
   - get
   - watch
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: k8s-cloudwatch-adapter:crd-metrics-reader
